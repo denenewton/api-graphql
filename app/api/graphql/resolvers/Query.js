@@ -18,7 +18,7 @@ export const Query = {
 
     getMovieByTitle: async (_, {title}, {Movie}) => await Movie.findOne({title: { $regex: title, $options: "i" }}),
 
-    getMovieByGenre: async (_, {genre}, {Movie}) => await Movie.find({genre: genre}),
+    getMovieByGenre: async (_, {genre}, {Movie}) => await Movie.find({genre:  { $regex: genre, $options: "i" }}),
 
     getMovieByYear: async (_, {year},  {Movie}) => await Movie.find({year: year}),
     

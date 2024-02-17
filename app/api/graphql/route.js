@@ -1,16 +1,9 @@
-
 import { createYoga, createSchema } from "graphql-yoga";
 import Castmember from "../../../model/Castmember";
 import conn from "../../../utils/connectMongo"
 import typesDefs from "./types/typeDefs";
 import Movie from "../../../model/Movie";
 import resolvers from "./resolvers";
-
-
-
-export const config = {
-  api: { bodyParser: false },
-};
 
 
 (async function () {
