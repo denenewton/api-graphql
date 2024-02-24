@@ -4,8 +4,7 @@ import {
   ifMovieExists,
   payloadToSend,
   verifyUniqueFields,
-} from "../../../../utils/HasErrors"
-
+} from "../../../../utils/HasErrors";
 
 export const Mutation = {
   createMovie: async (_, { data }, { Movie }) => {
@@ -21,9 +20,8 @@ export const Mutation = {
   updateMovie: async (_, { data, id }, { Movie }) => {
     if (verifyIdField(id)) return verifyIdField(id);
 
-    if(await ifMovieExists(Movie, id, data?.title)) 
-    return  await ifMovieExists(Movie, id, data?.title)
-    
+    if (await ifMovieExists(Movie, id, data?.title))
+      return await ifMovieExists(Movie, id, data?.title);
 
     if (data?.id) {
       return {
@@ -55,20 +53,20 @@ export const Mutation = {
   },
 
   //CREATE CAST PEOPLE
-  createCastMovieById: async (_, { id }, {Castmember }) => {
+  createCastMovieById: async (_, { id }, { Castmember }) => {
     const url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=633850d2875917e088075da2bad6265e`;
     const res = await fetch(url, options);
     const json = await res.json();
-    const _cast = await json["cast"].map(mov => {
-       if(!mov.character) return;
-        return {
+    const _cast = await json["cast"].map((mov) => {
+      if (!mov.character) return;
+      return {
         movieID: parseInt(id),
         ...mov,
-        }
+      };
     });
     // REMOV EL NULL
-    const cast = await _cast.filter( c => c)
-   
+    const cast = await _cast.filter((c) => c);
+
     await Castmember.insertMany(cast);
     //console.log(cast);
     return cast;
@@ -106,5 +104,4 @@ export const Mutation = {
     });
     return res;
   },
-
 };
