@@ -1,10 +1,17 @@
 import { Mutation } from "./Mutation";
-import { Movie, Query } from "./Query";
-import { MoviePayload } from "./__resolverTypes";
+import { Query } from "./Query";
+import {
+  MoviePayload,
+  MovieAndCastPayload,
+  InfoPayload,
+  PersonPayload,
+} from "./__resolverTypes";
 
 export default {
-  Movie: {...Movie },
   Query: { ...Query },
   Mutation: { ...Mutation },
-  MoviePayload: {...MoviePayload },
+  MoviePayload: { ...MoviePayload },
+  MovieAndCastPayload: { ...MovieAndCastPayload },
+  InfoPayload: { ...InfoPayload },
+  PersonPayload: { ...PersonPayload },
 };

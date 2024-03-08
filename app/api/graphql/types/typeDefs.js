@@ -1,18 +1,39 @@
 import { gql } from "graphql-tag";
 
 const typeDefs = gql`
-  type Movie {
-    id: ID!
+  interface Midia {
+    _id: ID
     title: String!
-    genre: Genres!
-    year: Int!
+    release_date: String!
+    description: String!
+  }
+
+  type Movie implements Midia {
+    _id: ID
+    id: Int!
+    title: String!
+    genres: [Genre]
+    release_date: String!
     popularity: Float
     director: String!
-    urlImage: String
-    backdrop_path: String
-    urlMovie: String
+    url_image: String
+    url_movie: String
     description: String!
-    cast: [Actor]
+  }
+
+  type MovieAndCast implements Midia {
+    _id: ID
+    id: Int!
+    title: String!
+    genres: [Genre]
+    release_date: String!
+    popularity: Float
+    director: String!
+    url_image: String
+    backdrop_path: String
+    url_movie: String
+    description: String!
+    casts: [Actor]
   }
 
   enum Genres {
@@ -20,24 +41,62 @@ const typeDefs = gql`
     Comedy
     Romance
     Fantasy
+    Family
     Action
     Thriller
     Drama
     Teen
     Science_Fiction
+    TV_Movie
+    Mystery
+    Crime
   }
 
-  input MovieInput {
-    id: ID
-    title: String
-    genre: String
-    year: Int
+  type Genre {
+    _id: ID
+    id: Int
+    name: Genres
+  }
+
+  interface Character {
+    _id: ID
+    name: String
+    original_name: String
     popularity: Float
-    director: String
-    urlImage: String
-    backdrop_path: String
-    urlMovie: String
-    description: String
+    profile_path: String
+  }
+
+  type Actor implements Character {
+    _id: ID
+    id: Int!
+    adult: Boolean
+    gender: Int
+    known_for_department: String
+    name: String
+    original_name: String
+    popularity: Float
+    profile_path: String
+    cast_id: Int
+    character: String
+    credit_id: String
+    order: Int
+  }
+
+  type Person {
+    adult: Boolean
+    also_known_as: [String]
+    biography: String
+    birthday: String
+    deathday: String
+    gender: Int
+    homepage: String
+    id: Int
+    imdb_id: String
+    known_for_department: String
+    name: String
+    place_of_birth: String
+    popularity: Float
+    profile_path: String
   }
 
   type Info {
@@ -49,97 +108,33 @@ const typeDefs = gql`
     last: Int
   }
 
-  interface Person {
-    id: ID!
-    adult: Boolean
-    gender: Int
-    known_for_department: String
-    name: String
-    original_name: String
-    popularity: Float
-    profile_path: String
-    credit_id: String
-  }
-
-  type Actor implements Person {
-    id: ID!
-    movieID: Int
-    adult: Boolean
-    gender: Int
-    known_for_department: String
-    name: String
-    original_name: String
-    popularity: Float
-    profile_path: String
-    cast_id: Int
-    character: String
-    credit_id: String
-    order: Int
-  }
-  input ActorInput {
-    id: ID
-    movieID: Int
-    adult: Boolean
-    gender: Int
-    known_for_department: String
-    name: String
-    original_name: String
-    popularity: Float
-    profile_path: String
-    cast_id: Int
-    character: String
-    credit_id: String
-    order: Int
-  }
-
-  type Crewmember implements Person {
-    id: ID!
-    adult: Boolean
-    gender: Int
-    known_for_department: String
-    name: String
-    original_name: String
-    popularity: Float
-    profile_path: String
-    credit_id: String
-    department: String
-    job: String
-  }
-
   type Error {
-    message: String
+    errors: String
   }
 
   union MoviePayload = Movie | Error
 
+  union MovieAndCastPayload = MovieAndCast | Error
+
+  union InfoPayload = Info | Error
+
+  union PersonPayload = Person | Error
+
   input filterMovies {
     genre: String
     title: String
-    year: Int
+    year: String
   }
 
   type Query {
-    movies(filter: filterMovies): [Movie]!
-    cast: [Actor!]!
-    movie(id: Int): Movie!
-    getMovieByTitle(title: String): Movie!
-    getMovieByGenre(genre: String): [Movie!]!
-    getMovieByYear(year: Int): [Movie!]!
-    getMovies(limit: Int, offset: Int): [Movie!]!
-    getPage(filter: filterMovies, page: Int, perPage: Int): Info!
+    movies(filter: filterMovies): [MoviePayload]
+    movie(id: Int!): MovieAndCastPayload
+    moviesByTitle(title: String): MovieAndCastPayload
+    getPage(filter: filterMovies, page: Int, perPage: Int): InfoPayload
+    getPersonById(id: Int!): PersonPayload
   }
-
   type Mutation {
-    createMovie(data: MovieInput!): MoviePayload
-    updateMovie(id: ID!, data: MovieInput!): MoviePayload
-    deleteMovie(id: ID!): MoviePayload
-
-    createCastMovieById(id: ID!): [Actor]
-    createMovieById(id: ID!): MoviePayload
-    updateOneCastMember(id: Int!, movieID: Int!, data: ActorInput!): Actor
-    deleteManyCastMember(movieID: Int!): [Actor]
-    createMultipleCast(data: MovieInput): [Actor] #fazer amanha
-    createMultipleGenre(id: Int): Boolean
+    createMovieById(id: Int!, url_movie: String): MovieAndCastPayload
   }
 `;
 

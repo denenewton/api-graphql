@@ -1,30 +1,123 @@
-import getPage, { filtering } from '../../../../utils/utilities'
-
-export const  Movie =  {
-    cast: async (parent, args, { Castmember}) =>{
-    const res = await Castmember.find({movieID: parent.id})
-    return res
-    },    
-}
-
+import {
+  filtering,
+  getPage,
+  getPersonMaped,
+} from "../../../../utils/utilities";
 
 export const Query = {
+  movies: async (
+    _,
+    { filter = { title: "", genre: "", year: "" } },
+    { Movie }
+  ) => {
+    const { title, genre, year } = filter;
+    try {
+      const movies = await filtering(title, genre, year, Movie);
 
-    cast: async (parent, args, { Castmember }) => await Castmember.find(),
+      if (movies.length === 0) {
+        return [
+          {
+            __typename: "Error",
+            errors: "Sorry, this movie does not exist in our database.",
+          },
+        ];
+      }
+      return movies;
+    } catch (error) {
+      return [
+        {
+          __typename: "Error",
+          errors: error.message,
+        },
+      ];
+    }
+  },
 
-    movies: async (_, { filter }, { Movie }) => await filtering(filter, Movie),
-  
-    movie: async (_ , { id }, { Movie}) => await Movie.findOne({id}),
+  movie: async (_, { id }, { Movie }) => {
+    try {
+      const movie = await Movie.findOne()
+        .and([{ id: id }])
+        .select("-date -__v");
 
-    getMovieByTitle: async (_, {title}, {Movie}) => await Movie.findOne({title: { $regex: title, $options: "i" }}),
+      if (!movie) {
+        return {
+          __typename: "Error",
+          errors: "Sorry, this movie does not exist in our database.",
+        };
+      }
+      return movie;
+    } catch (error) {
+      return {
+        __typename: "Error",
+        errors: error.message,
+      };
+    }
+  },
 
-    getMovieByGenre: async (_, {genre}, {Movie}) => await Movie.find({genre:  { $regex: genre, $options: "i" }}),
+  moviesByTitle: async (_, { title }, { Movie }) => {
+    try {
+      const movie = await Movie.findOne()
+        .and([{ title: { $regex: title, $options: "i" } }])
+        .select("-date -__v");
 
-    getMovieByYear: async (_, {year},  {Movie}) => await Movie.find({year: year}),
-    
-    getPage: async (_, { filter, page, perPage }, { Movie }) => {
-        const movies = await filtering(filter, Movie)
-        const infoPage =  await getPage(movies, page, perPage);
-        return infoPage;
-      },
-}
+      if (!movie) {
+        return {
+          __typename: "Error",
+          errors: "Sorry, this film does not exist in our database.",
+        };
+      }
+
+      return movie;
+    } catch (error) {
+      return {
+        __typename: "Error",
+        errors: error.message,
+      };
+    }
+  },
+
+  getPage: async (
+    _,
+    { filter = { title: "", genre: "", year: "" }, page, perPage },
+    { Movie }
+  ) => {
+    const { title, genre, year } = filter;
+    try {
+      const movies = await filtering(title, genre, year, Movie);
+      if (!movies) {
+        return {
+          __filename: "Error",
+          errors: "Sorry, we cannot find anything in our database.",
+        };
+      }
+      const infoPage = getPage(movies, page, perPage);
+
+      return infoPage;
+    } catch (error) {
+      return {
+        __filename: "Error",
+        errors: error.message,
+      };
+    }
+  },
+  getPersonById: async (_, { id }, { Person }) => {
+    try {
+      const pers = await Person.find({ id: id });
+
+      if (pers.length > 0) {
+        return pers[0];
+      }
+
+      const person = await getPersonMaped(id);
+
+      await Person.create({ ...person });
+
+      return person;
+    } catch (error) {
+      return {
+        __typename: "Error",
+        errors: "Sorry! something goes wrong!, " + error.message,
+      };
+    }
+  },
+};

@@ -1,48 +1,68 @@
 import mongoose, { models } from "mongoose";
+import { castMemberSchema } from "./Castmember";
+import { genreSchema } from "./Genre";
 
 const Schema = mongoose.Schema({
-  
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-  },
   title: {
     type: String,
-    required: true,
+    minlength: 3,
+    maxlength: 50,
+    trim: true,
+    required: [true, "Please enter the movie title"],
   },
-  genre: {
-    type: String,
-    required: true,
+  genres: {
+    type: [genreSchema],
+    validate: {
+      validator: function (v) {
+        return v && v.length > 0;
+      },
+      message: "This Genre is not valiable",
+    },
+    required: [true, "Please enter the movie genre"],
   },
-  year: {
+  id: {
     type: Number,
-    required: true,
+    required: [true, "The id of this movie is missing"],
+  },
+  release_date: {
+    type: String,
+    trim: true,
+    required: [true, "Please enter the movie release date"],
   },
   popularity: {
     type: Number,
   },
   director: {
     type: String,
-    required: true,
-  },
-  urlImage: {
-    type: String,
-  },
-  
-  backdrop_path: {
-   type: String,
+    trim: true,
+    required: [true, "Please enter the movie director"],
   },
 
-  urlMovie: {
+  url_image: {
     type: String,
+    trim: true,
+  },
+
+  backdrop_path: {
+    type: String,
+    trim: true,
+  },
+
+  url_movie: {
+    type: String,
+    trim: true,
   },
   description: {
     type: String,
-    required: true,
+    trim: true,
+    required: [true, "Please enter the movie description"],
+  },
+  casts: [castMemberSchema],
+  date: {
+    type: Date,
+    default: Date.now,
   },
 });
-
 
 const Movie = models.Movie || mongoose.model("Movie", Schema);
 export default Movie;

@@ -1,5 +1,66 @@
-export default function getPage(array, page, perPage) {
-  const obj = {};
+export const options = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization: process.env.TOKEN_API_MOVIE,
+  },
+};
+////////////////GET//MOVIE//BY//ID//URL_MOVIE//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function getMovieMaped(id, url_movie) {
+  const url = "https://api.themoviedb.org/3/movie/" + id + "?language=en-US";
+  var movie = new Object();
+
+  try {
+    const res = await fetch(url, options);
+    const json = await res.json();
+    movie = {
+      id: json.id,
+      title: json.original_title,
+      genres: json.genres,
+      release_date: json.release_date,
+      popularity: json.popularity,
+      description: json.overview,
+      director: json.production_companies[0].name || "null",
+      backdrop_path: "https://image.tmdb.org/t/p/original" + json.backdrop_path,
+      url_image: "https://image.tmdb.org/t/p/w500" + json.backdrop_path,
+      url_movie: url_movie ? url_movie : "https://drive.google.com/file/d/",
+    };
+  } catch (ex) {
+    console.log("getMovieMaped: ", ex.message);
+    throw new Error(ex);
+  }
+
+  return movie;
+}
+///////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+export async function getCastMamberMaped(id) {
+  const url = `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`;
+  try {
+    const res = await fetch(url, options);
+
+    const json = await res.json();
+    let cast = await json["cast"].filter((c) => c.profile_path !== null);
+    cast = await cast.map((cast) => {
+      if (!cast.character) return;
+
+      return {
+        ...cast,
+        profile_path: "https://image.tmdb.org/t/p/original" + cast.profile_path,
+      };
+    });
+
+    return cast;
+  } catch (ex) {
+    console.log("getCastMamberMaped: ", ex.message);
+    throw new Error("getCastMamberMaped: There is no movie with this id," + ex);
+  }
+}
+////////////////GET//PAGES//DOES//PAGINATION///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export function getPage(array, page, perPage) {
+  const obj = new Object();
   const start = (page - 1) * perPage; // start == offset
   const end = page * perPage;
 
@@ -24,47 +85,72 @@ export default function getPage(array, page, perPage) {
 
   return obj;
 }
-
-export async function filtering(filter, Movie) {
-  let movies;
-  if (filter) {
-    if (filter?.title) {
-      movies = await Movie?.find({
-        title: { $regex: filter?.title, $options: "i" },
-      });
-      if (filter.year) {
-        movies = movies.filter((mov) => mov.year === filter?.year);
-      }
-      if (filter?.genre) {
-        const regex = new RegExp(filter?.genre, "i");
-        movies = movies.filter((mov) => mov.genre?.match(regex));
-      }
-      return movies;
-    }
-    if (filter?.genre) {
-      movies = await Movie?.find({
-        genre: { $regex: filter?.genre, $options: "i" },
-      });
-
-      if (filter.year) {
-        movies = movies.filter((mov) => mov.year === filter?.year);
-      }
-      return movies;
-    }
-    if (filter.year) {
-      movies = await Movie?.find({ year: filter?.year });
-      return movies;
-    }
+////////////////FILTERING MOVIES///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function filtering(title = "", genre = "", year = "", Movie) {
+  try {
+    let movies = await Movie.find()
+      .and([
+        {
+          title: { $regex: title, $options: "i" },
+          release_date: { $regex: year, $options: "i" },
+          "genres.name": { $regex: genre, $options: "i" },
+        },
+      ])
+      .sort("title")
+      .select("-casts -__v -date");
+    //.countDocuments();
+    return movies;
+  } catch (ex) {
+    throw new Error(ex);
   }
-  movies = await Movie?.find();
-  return movies;
 }
+///////////////CREATE//MOVIE//WITH//CAST///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function createMovieWithCastMambers(movie, casts, Movie) {
+  try {
+    const _movie = new Movie({ ...movie, casts: casts });
+    const result = await _movie.save();
+    return result;
+  } catch (ex) {
+    console.log("createMovieWithCastMambers: ", ex.message);
+    throw new Error(ex);
+  }
+}
+////////////////CREATE//MOVIE//BY//ID///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function createMovieById(id, url_movie, Movie) {
+  try {
+    const exists = await Movie.findOne({ id: id });
+    if (exists) {
+      return {
+        __typename: "Error",
+        errors: "Sorry, this movie already exists in our database.",
+      };
+    }
+    const casts = await getCastMamberMaped(id);
+    const movie = await getMovieMaped(id, url_movie);
+    const result = await createMovieWithCastMambers(movie, casts, Movie);
 
-export  const options = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MzM4NTBkMjg3NTkxN2UwODgwNzVkYTJiYWQ2MjY1ZSIsInN1YiI6IjYzMGVhN2Y5ZDdhNzBhMDA5Mjk5NGFmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3u8lj5BX7AfegFWeUORKenyjAs0bFLYn_-KE3Wk61cM",
-  },
-};
+    return result;
+  } catch (ex) {
+    throw new Error(ex);
+  }
+}
+////////////////GET//PERSON//BY//ID///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function getPersonMaped(id) {
+  const url = `https://api.themoviedb.org/3/person/${id}?language=en-US`;
+  var person = new Object();
+
+  const res = await fetch(url, options);
+  const json = await res.json();
+  const profile_path =
+    "https://image.tmdb.org/t/p/original" + json.profile_path;
+  person = {
+    ...json,
+    profile_path: profile_path,
+  };
+
+  return person;
+}
