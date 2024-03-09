@@ -154,3 +154,53 @@ export async function getPersonMaped(id) {
 
   return person;
 }
+////////////////GET//MOVIE//BY//TITLE//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export async function getMovieByTitle(title, Movie) {
+  const gender = [1, 2];
+  const popularity = 10;
+  const movie = await Movie.aggregate([
+    {
+      $match: { title: { $regex: title, $options: "i" } },
+    },
+    { $sort: { title: 1 } },
+    {
+      $project: {
+        id: 1,
+        title: 1,
+        director: 1,
+        release_date: 1,
+        popularity: 1,
+        url_image: 1,
+        url_movie: 1,
+        description: 1,
+        backdrop_path: 1,
+        "genres.id": 1,
+        "genres.name": 1,
+        "casts.id": 1,
+        "casts.name": 1,
+        "casts.character": 1,
+        "casts.gender": 1,
+        "casts.popularity": 1,
+        "casts.profile_path": 1,
+      },
+    },
+    {
+      $addFields: {
+        casts: {
+          $filter: {
+            input: "$casts",
+            as: "cast",
+            cond: {
+              $and: [
+                { $in: ["$$cast.gender", gender] },
+                { $gte: ["$$cast.popularity", popularity] },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ]);
+  return movie;
+}

@@ -2,6 +2,7 @@ import {
   filtering,
   getPage,
   getPersonMaped,
+  getMovieByTitle,
 } from "../../../../utils/utilities";
 
 export const Query = {
@@ -56,18 +57,16 @@ export const Query = {
 
   moviesByTitle: async (_, { title }, { Movie }) => {
     try {
-      const movie = await Movie.findOne()
-        .and([{ title: { $regex: title, $options: "i" } }])
-        .select("-date -__v");
+      const movie = await getMovieByTitle(title, Movie);
 
-      if (!movie) {
+      if (movie.length === 0) {
         return {
           __typename: "Error",
           errors: "Sorry, this film does not exist in our database.",
         };
       }
 
-      return movie;
+      return movie[0];
     } catch (error) {
       return {
         __typename: "Error",
