@@ -1,19 +1,21 @@
-import { useState } from "react";
 import { Axios, UPDATE_MOVIE, queryData } from "../utils/cliente";
 
 const useUpdate = () => {
-  const [error, setError] = useState([]);
+  //const [error, setError] = useState([]);
 
   const updateMovie = async (id, data) => {
-    await Axios.post(
-      "/graphql",
-      queryData(UPDATE_MOVIE, { id: parseInt(id), data: data })
-    )
-      .then((res) => console.log(res.data))
-      .catch((err) => setError(err));
+    try {
+      const response = await Axios.post(
+        "/graphql",
+        queryData(UPDATE_MOVIE, { id: parseInt(id), data: data })
+      );
+      return response.data.data.updateMovie;
+    } catch (ex) {
+      throw new Error(ex);
+    }
   };
 
-  return { updateMovie, error };
+  return { updateMovie };
 };
 
 export default useUpdate;

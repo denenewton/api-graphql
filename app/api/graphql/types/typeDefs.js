@@ -10,12 +10,12 @@ const typeDefs = gql`
 
   type Movie implements Midia {
     _id: ID
-    id: Int!
+    id: Int
     title: String!
     genres: [Genre]
     release_date: String!
     popularity: Float
-    director: String!
+    director: String
     url_image: String
     url_movie: String
     description: String!
@@ -56,6 +56,23 @@ const typeDefs = gql`
     _id: ID
     id: Int
     name: Genres
+  }
+
+  input GenreInput {
+    id: Int
+    name: Genres
+  }
+
+  input MovieInput {
+    id: Int
+    title: String!
+    genres: [GenreInput]
+    release_date: String!
+    popularity: Float
+    director: String
+    url_image: String
+    url_movie: String
+    description: String!
   }
 
   interface Character {
@@ -135,6 +152,7 @@ const typeDefs = gql`
   }
   type Mutation {
     createMovieById(id: Int!, url_movie: String): MovieAndCastPayload
+    updateMovie(id: Int!, data: MovieInput!): MoviePayload
   }
 `;
 

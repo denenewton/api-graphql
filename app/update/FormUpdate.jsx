@@ -3,12 +3,14 @@
 import useMovieByTitle from "../../hook/useMovieByTItle";
 import { useEffect, useState } from "react";
 import useUpdate from "../../hook/useUpdate";
+import { useRouter } from "next/navigation";
 import Footer from "../../components/Footer";
 import { Container } from "@chakra-ui/layout";
 import Form from "../../components/Form";
 
 export default function FormUpdate({ slug }) {
   const { data } = useMovieByTitle(decodeURI(slug));
+  const router = useRouter();
   const { updateMovie } = useUpdate();
   const [movie, setMovie] = useState();
   const [submitting, setIsSubmitting] = useState(false);
@@ -17,12 +19,11 @@ export default function FormUpdate({ slug }) {
     if (data) {
       setMovie({
         title: data?.title,
-        genre: data?.genre,
         director: data?.director,
-        year: data?.year,
+        release_date: data?.release_date,
+        director: data?.director,
         description: data?.description,
-        popularity: data?.popularity,
-        urlMovie: data?.urlMovie,
+        url_movie: data?.url_movie,
       });
     }
   }, [data, slug]);
@@ -32,9 +33,12 @@ export default function FormUpdate({ slug }) {
     setIsSubmitting(true);
 
     try {
-      await updateMovie(data?.id, movie);
+      const response = await updateMovie(data?.id, movie);
+      if (response.errors) throw new Error(response.errors);
+      router.push("/update/" + decodeURI(slug));
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      alert(error.message);
     } finally {
       setIsSubmitting(false);
     }

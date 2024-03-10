@@ -41,17 +41,51 @@ const Form = ({
           />
         </label>
 
-        <label>
-          <span className="font-satoshi font-semibold text-base">Genre</span>
+        {type !== "Update" && (
+          <>
+            <label>
+              <span className="font-satoshi font-semibold text-base">
+                Genre
+              </span>
 
-          <input
-            type="text"
-            value={movie?.genre}
-            className="form_input"
-            onChange={(e) => setMovie({ ...movie, genre: e.target.value })}
-            required
-          />
-        </label>
+              <input
+                type="text"
+                value={movie?.genre}
+                className="form_input"
+                onChange={(e) => setMovie({ ...movie, genre: e.target.value })}
+                required
+              />
+            </label>
+            <label>
+              <span className="font-satoshi font-semibold text-base">
+                Popularity
+              </span>
+
+              <input
+                type="number"
+                value={movie?.popularity}
+                className="form_input"
+                onChange={(e) =>
+                  setMovie({ ...movie, popularity: e.target.value })
+                }
+                required
+              />
+            </label>
+            <label>
+              <span className="font-satoshi font-semibold text-base">
+                Image
+              </span>
+
+              <input
+                type="file"
+                name="file"
+                accept="image/png, image/jpeg"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                className="form_input"
+              />
+            </label>
+          </>
+        )}
 
         <label>
           <span className="font-satoshi font-semibold text-base">Director</span>
@@ -67,25 +101,16 @@ const Form = ({
 
         <label>
           <span className="font-satoshi font-semibold text-base">
-            Popularity
+            Release Date
           </span>
 
           <input
-            type="number"
-            value={movie?.popularity}
+            type="text"
+            value={movie?.release_date}
             className="form_input"
-            onChange={(e) => setMovie({ ...movie, popularity: e.target.value })}
-            required
-          />
-        </label>
-        <label>
-          <span className="font-satoshi font-semibold text-base">Year</span>
-
-          <input
-            type="number"
-            value={movie?.year}
-            className="form_input"
-            onChange={(e) => setMovie({ ...movie, year: e.target.value })}
+            onChange={(e) =>
+              setMovie({ ...movie, release_date: e.target.value })
+            }
             required
           />
         </label>
@@ -96,22 +121,10 @@ const Form = ({
 
           <input
             type="text"
-            value={movie?.urlMovie}
+            value={movie?.url_movie}
             className="form_input"
-            onChange={(e) => setMovie({ ...movie, urlMovie: e.target.value })}
+            onChange={(e) => setMovie({ ...movie, url_movie: e.target.value })}
             required
-          />
-        </label>
-
-        <label>
-          <span className="font-satoshi font-semibold text-base">Image</span>
-
-          <input
-            type="file"
-            name="file"
-            accept="image/png, image/jpeg"
-            onChange={(e) => setImageFile(e.target.files[0])}
-            className="form_input"
           />
         </label>
 

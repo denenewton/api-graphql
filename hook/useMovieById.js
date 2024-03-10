@@ -1,44 +1,25 @@
 "use client";
 
-import {
-  CRETE_MOVIE_BY_ID,
-  CREATE_CAST_BY_ID,
-  queryData,
-  Axios,
-} from "../utils/cliente";
+import { CRETE_MOVIE_BY_ID, queryData, Axios } from "../utils/cliente";
 
 import { useState } from "react";
 
 const useCreateMovie = () => {
   const [error, setError] = useState("");
-  const [payload, setPayload] = useState({ id: "", urlMovie: "" });
+  const [payload, setPayload] = useState({ id: "", url_movie: "" });
   const [submitting, setIsSubmitting] = useState(false);
 
-  const createAMovie = async (id, url) => {
+  const createAMovie = async (id, url_movie) => {
     try {
       const response = await Axios.post(
         "/graphql",
         queryData(CRETE_MOVIE_BY_ID, {
           id: parseInt(id),
-          urlMovie: url || "http://",
+          url_movie: url_movie || "https://google.com",
         })
       );
       const data = await response.data;
       return data.data?.createMovieById;
-    } catch (error) {
-      console.log(error);
-      setError(error);
-    }
-  };
-
-  const createCast = async (id) => {
-    try {
-      const response = await Axios.post(
-        "/graphql",
-        queryData(CREATE_CAST_BY_ID, { id: parseInt(id) })
-      );
-      const data = await response.data;
-      return data.data;
     } catch (error) {
       console.log(error);
       setError(error);
@@ -52,7 +33,6 @@ const useCreateMovie = () => {
     submitting,
     setIsSubmitting,
     createAMovie,
-    createCast,
   };
 };
 

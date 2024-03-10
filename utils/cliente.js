@@ -16,7 +16,7 @@ const headers = {
 };
 
 export const Axios = axios.create({
-  baseURL: "https://api-graphql-kappa.vercel.app/api/", //"http://localhost:3000/api/",
+  baseURL: "http://localhost:3000/api/", //"https://api-graphql-kappa.vercel.app/api/",
   method: "post",
   headers: headers,
 });
@@ -91,7 +91,7 @@ export const GUET_MOVIES_BY_TITLE = `
 
 export const CRETE_MOVIE_BY_ID = `
 mutation  CreateMovieById($id:Int!, $urlMovie:String) {
-  createMovieById(id:$id, urlMovie:$urlMovie){
+  createMovieById(id:$id, url_movie:$urlMovie){
     ... on MovieAndCast {
       id
       title
@@ -134,28 +134,20 @@ query MyQuery($id: Int = 10) {
 }
 `;
 
-export const CREATE_CAST_BY_ID = `
-mutation ($id: Int!) {
-  createCastMovieById(id: $id) {
-    ... on Response {
-      response
-    }
-    ... on Error {
-      message
-    }
-  }
-}
-`;
-
 export const UPDATE_MOVIE = ` 
   mutation($id: Int!, $data: MovieInput!) {
     updateMovie(id: $id, data: $data) {
     ...on Movie{
       id 
+      title
+      release_date
+      popularity
+      director
+      description
       
     }
-    ...on Error {
-      message
+    ... on Error {
+      errors
     }
   }
 }`;

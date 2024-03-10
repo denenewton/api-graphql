@@ -1,6 +1,5 @@
 "use client";
 
-import { addCollection } from "../../utils/firebase.utils";
 import useCreateMovie from "../../hook/useMovieById";
 import { useRouter } from "next/navigation";
 import { Container } from "@chakra-ui/react";
@@ -14,7 +13,6 @@ const RegisterForm = () => {
     submitting,
     setIsSubmitting,
     createAMovie,
-    createCast,
   } = useCreateMovie();
 
   const router = useRouter();
@@ -24,24 +22,19 @@ const RegisterForm = () => {
     setIsSubmitting(true);
 
     try {
-      const movie = await createAMovie(payload.id, payload.urlMovie);
+      const movie = await createAMovie(payload.id, payload.url_movie);
       console.log(movie);
-      if (movie) {
-        const resp = await createCast(payload.id);
-        console.log(resp);
-        if (resp) await addCollection("movies", movie);
-        router.push("/");
-      } else {
-        console.log("Somethin goes wrong...");
-      }
-    } catch (error) {
-      console.log(error);
+      if (movie.errors) {
+        throw new Error(movie.errors);
+      } else router.push("/");
+    } catch (ex) {
+      alert(ex);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (error) return <h1>{JSON.stringify(error)}</h1>;
+  if (error) return <h1>{error}</h1>;
 
   return (
     <Container
@@ -80,12 +73,11 @@ const RegisterForm = () => {
           </span>
           <input
             type="text"
-            value={payload.urlMovie}
+            value={payload.url_movie}
             className="form_input"
             onChange={(e) =>
-              setPayload({ ...payload, urlMovie: e.target.value })
+              setPayload({ ...payload, url_movie: e.target.value })
             }
-            required
           />
         </label>
 

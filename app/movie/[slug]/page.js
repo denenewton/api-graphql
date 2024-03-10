@@ -27,6 +27,9 @@ export default function page({ params }) {
   const { data } = useMovieByTitle(slug);
   const { userDoc, currentUser } = useAuth();
   const colorDetails = useColorModeValue("gray.50", "gray.700");
+  console.log("DATA", data);
+
+  if (data?.errors) return <p className="text-center mt-12">{data?.errors}</p>;
 
   return (
     <GridLayout pathname={`/movie/${params.slug}`}>

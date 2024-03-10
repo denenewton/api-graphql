@@ -1,3 +1,5 @@
+import Joi from "joi";
+
 export const options = {
   method: "GET",
   headers: {
@@ -5,6 +7,7 @@ export const options = {
     Authorization: process.env.TOKEN_API_MOVIE,
   },
 };
+
 ////////////////GET//MOVIE//BY//ID//URL_MOVIE//////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 export async function getMovieMaped(id, url_movie) {
@@ -204,3 +207,15 @@ export async function getMovieByTitle(title, Movie) {
   ]);
   return movie;
 }
+///////////////SCHEMA//UPDATE//MOVIE//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+export const schemaUpdateMovie = Joi.object({
+  title: Joi.string().min(3).max(50).required(),
+  director: Joi.string().min(3).max(50).required(),
+  release_date: Joi.string()
+    .pattern(/^\d{4}-\d{2}-\d{2}$/, "numbers")
+    .required()
+    .error(new Error("release_date must be this pattern yyyy-mm-dd")),
+  description: Joi.string().min(5).required(),
+  url_movie: Joi.string().min(8).required(),
+});
