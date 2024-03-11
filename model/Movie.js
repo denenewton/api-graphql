@@ -32,6 +32,9 @@ const Schema = mongoose.Schema({
   popularity: {
     type: Number,
   },
+  vote_average: {
+    type: Number,
+  },
   director: {
     type: String,
     trim: true,

@@ -1,10 +1,17 @@
 "use client";
-import { Button, HStack, List, ListItem, Heading } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  List,
+  ListItem,
+  Heading,
+  useColorMode,
+} from "@chakra-ui/react";
 import useSearchContext from "../hook/useSearch";
 
 const GenreList = () => {
   const genres = [
-    "Science_Fiction",
+    "Adventure",
     "Comedy",
     "Thriller",
     "Romance",
@@ -15,11 +22,12 @@ const GenreList = () => {
     "Mystery",
     "Action",
     "Drama",
-    "Adventure",
     "Crime",
+    "Science_Fiction",
     "All Genres",
   ];
   const { searchGenre, setSearchGenre } = useSearchContext();
+  const { colorMode } = useColorMode();
 
   return (
     <>
@@ -33,7 +41,8 @@ const GenreList = () => {
               <Button
                 fontWeight={genre === searchGenre ? "bold" : "normal"}
                 onClick={() => setSearchGenre(genre)}
-                fontSize="lg"
+                fontSize="md"
+                color={colorMode === "dark" ? "#fff" : "#444"}
                 variant="link"
               >
                 {genre === "Science_Fiction"

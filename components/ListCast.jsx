@@ -38,7 +38,7 @@ const ListCast = ({ casts }) => {
 
                       <HStack justifyContent="space-between">
                         <Text fontSize={12}>Popularity</Text>
-                        <CriticScore popularity={p.popularity} />
+                        <CriticScore popularity={p.popularity.toFixed(1)} />
                       </HStack>
                     </CardBody>
                   </Link>

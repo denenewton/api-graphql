@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardBody, Image, Text, Flex, Spacer } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import buildUrl from "../services/buildUrl";
-
+import CircularProgressBar from "./CircularProgressBar";
 const CardMovies = ({ movie, userDoc, currentUser }) => {
   const url = buildUrl(movie?.title.toString());
 
@@ -14,17 +14,17 @@ const CardMovies = ({ movie, userDoc, currentUser }) => {
         objectFit="cover"
         backgroundPosition="center"
       />
-
-      <CardBody>
+      <CircularProgressBar rating={movie?.vote_average.toFixed(1)} />
+      <CardBody mt="-10px">
         <Link href={`/movie/${url}`}>
-          <Text fontSize={"2xl"} fontWeight={600}>
+          <Text fontSize={"2xl"} fontWeight={600} pl={0} ml="-5px">
             {movie?.title}
           </Text>
         </Link>
         <Flex alignItems="center">
           {" "}
-          <Text fontSize="14.7px" fontWeight={500}>
-            {movie?.release_date.split("-")[0]}
+          <Text fontSize="14.7px" fontWeight={500} pl={0} ml="-5px">
+            {movie?.release_date}
           </Text>
           <Spacer />
           {currentUser && userDoc?.authorized && (

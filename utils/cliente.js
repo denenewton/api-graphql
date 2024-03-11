@@ -43,6 +43,7 @@ query ($filter: filterMovies,$page:Int!,$perPage:Int!) {
       director
       release_date
       popularity
+      vote_average
       description
       url_image
       url_movie
@@ -71,6 +72,7 @@ export const GUET_MOVIES_BY_TITLE = `
       director
       release_date
       popularity
+      vote_average
       description
       url_image
       url_movie
