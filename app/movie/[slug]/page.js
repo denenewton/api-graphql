@@ -84,28 +84,49 @@ export default function page({ params }) {
                 <HStack
                   justifyContent="space-between"
                   alignItems="stretch"
-                  pt={0}
+                  pt={1}
+                  pb={2}
                   mt="-1rem"
                 >
-                  <Text fontSize="sm">
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                  >
                     <Text as={"b"}>Director: </Text>
-                    {data?.director}
-                  </Text>
-                  <Text fontSize="sm">
+                    <Text>{data?.director}</Text>
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                  >
                     <Text as={"b"}>Genre: </Text>
-                    {data?.genres[0].name !== "Science_Fiction"
-                      ? data?.genres[0].name
-                      : "Science fiction"}
-                  </Text>
-                  <Text fontSize="sm" mb={2}>
-                    <Text as={"b"}>Year: </Text>
-                    {data?.release_date}
-                  </Text>
-                  <Text fontSize="sm" mb={2}>
+                    <Text>
+                      {data?.genres[0].name !== "Science_Fiction"
+                        ? data?.genres[0].name
+                        : "Science fiction"}
+                    </Text>
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    mb={2}
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                  >
+                    <Text as={"b"}>Release Date: </Text>
+                    <Text>{data?.release_date}</Text>
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    mb={2}
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                  >
                     <Text as={"b"}>Popularity: </Text>
 
                     <CriticScore popularity={data?.popularity} />
-                  </Text>
+                  </Flex>
                 </HStack>
                 <VStack width={"full"} align={"left"}>
                   <Text fontWeight={"bold"} mb={0}>
@@ -128,7 +149,10 @@ export default function page({ params }) {
               <Text fontWeight={"bold"} mb={1}>
                 SINOPSE
               </Text>
-              <Text fontSize={"sm"}> {data?.description}</Text>
+              <Text fontSize={"sm"} textAlign="justify">
+                {" "}
+                {data?.description}
+              </Text>
             </Box>
             <Stack
               spacing={{ base: 4, sm: 6 }}

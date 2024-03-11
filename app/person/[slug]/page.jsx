@@ -85,26 +85,47 @@ export default function page({ params }) {
                 <HStack
                   justifyContent="space-between"
                   alignItems="stretch"
-                  pt={0}
+                  pt={1}
+                  pb={2}
                   mt="-1rem"
                 >
-                  <Text fontSize="sm">
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                    mb={2}
+                  >
                     <Text as={"b"}>Place Of Birth: </Text>
                     {data?.place_of_birth}
-                  </Text>
-                  <Text fontSize="sm">
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                    mb={2}
+                  >
                     <Text as={"b"}>Department: </Text>
                     {data?.known_for_department}
-                  </Text>
-                  <Text fontSize="sm" mb={2}>
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                    mb={2}
+                  >
                     <Text as={"b"}> Birthday: </Text>
                     {data?.birthday}
-                  </Text>
-                  <Text fontSize="sm" mb={2}>
+                  </Flex>
+                  <Flex
+                    fontSize="sm"
+                    gap={{ sm: "0", lg: "5px" }}
+                    direction={{ sm: "column", lg: "row" }}
+                    mb={2}
+                  >
                     <Text as={"b"}>Popularity: </Text>
 
                     <CriticScore popularity={data?.popularity} />
-                  </Text>
+                  </Flex>
                 </HStack>
                 {/* <VStack width={"full"} align={"left"}>
                   <Text fontWeight={"bold"} mb={0}>
@@ -127,7 +148,7 @@ export default function page({ params }) {
               <Text fontWeight={"bold"} mb={1}>
                 Biography
               </Text>
-              <Text fontSize={"sm"}>
+              <Text fontSize={"sm"} textAlign="justify">
                 {" "}
                 {data?.biography ||
                   "We were unable to obtain any information about this actress. Maybe we can have that in the future"}
