@@ -3,8 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useMovies = (query) => {
   const fetchData = async ({ pageParam = 1 }) => {
-    const _genre =
-      query.genre !== "Science fiction" ? query.genre : "Science_Fiction";
+    const _genre = query.genre;
     const res = await Axios.post(
       "/graphql",
       queryData(GUET_PAGE, {

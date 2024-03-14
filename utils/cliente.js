@@ -16,7 +16,7 @@ const headers = {
 };
 
 export const Axios = axios.create({
-  baseURL: "https://api-graphql-kappa.vercel.app/api/", //"http://localhost:3000/api/",
+  baseURL: "http://localhost:3000/api/", //"https://api-graphql-kappa.vercel.app/api/",
   method: "post",
   headers: headers,
 });
@@ -115,8 +115,8 @@ mutation  CreateMovieById($id:Int!, $urlMovie:String) {
 `;
 
 export const GET_PERSON_BY_ID = `
-query MyQuery($id: Int = 10) {
-  getPersonById(id: $id) {
+query MyQuery($id: Int! , $id_movie: Int!) {
+  getPersonById(id: $id, id_movie: $id_movie) {
     ... on Person {
       id
       name

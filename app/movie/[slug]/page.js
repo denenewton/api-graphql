@@ -27,7 +27,6 @@ export default function page({ params }) {
   const { data } = useMovieByTitle(slug);
   const { userDoc, currentUser } = useAuth();
   const colorDetails = useColorModeValue("gray.50", "gray.700");
-  console.log("DATA", data);
 
   if (data?.errors) return <p className="text-center mt-12">{data?.errors}</p>;
 
@@ -133,7 +132,7 @@ export default function page({ params }) {
                     CAST
                   </Text>
                   <Box width={"full"}>
-                    <ListCast casts={data?.casts} />
+                    <ListCast idMovie={data?.id} casts={data?.casts} />
                   </Box>
                 </VStack>
               </Flex>

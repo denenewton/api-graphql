@@ -38,31 +38,15 @@ const typeDefs = gql`
     casts: [Actor]
   }
 
-  enum Genres {
-    Adventure
-    Comedy
-    Romance
-    Fantasy
-    Family
-    Action
-    Thriller
-    Drama
-    Teen
-    Science_Fiction
-    TV_Movie
-    Mystery
-    Crime
-  }
-
   type Genre {
     _id: ID
     id: Int
-    name: Genres
+    name: String
   }
 
   input GenreInput {
     id: Int
-    name: Genres
+    name: String
   }
 
   input MovieInput {
@@ -151,7 +135,7 @@ const typeDefs = gql`
     movie(id: Int!): MovieAndCastPayload
     moviesByTitle(title: String): MovieAndCastPayload
     getPage(filter: filterMovies, page: Int, perPage: Int): InfoPayload
-    getPersonById(id: Int!): PersonPayload
+    getPersonById(id: Int!, id_movie: Int!): PersonPayload
   }
   type Mutation {
     createMovieById(id: Int!, url_movie: String): MovieAndCastPayload

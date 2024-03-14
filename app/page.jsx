@@ -64,11 +64,7 @@ const page = () => {
           <Flex>
             {
               <Heading as="h1" fontSize="4xl" mb={7}>
-                {searchGenre === "Science_fiction"
-                  ? "Science fiction"
-                  : searchGenre === "All Genres"
-                  ? "Movies"
-                  : searchGenre}
+                {searchGenre === "All Genres" ? "Movies" : searchGenre}
                 {!searchGenre && "Movies"}
               </Heading>
             }

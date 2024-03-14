@@ -1,11 +1,17 @@
 import mongoose, { models } from "mongoose";
 
-const Schema = mongoose.Schema({
+const Schema = new mongoose.Schema({
   id: {
     type: Number,
     required: true,
   },
-
+  id_movie: [
+    {
+      type: mongoose.Schema.Types.Number,
+      ref: "Movie",
+      required: true,
+    },
+  ],
   adult: {
     type: Boolean,
     required: false,

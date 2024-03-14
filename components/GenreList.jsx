@@ -11,19 +11,19 @@ import useSearchContext from "../hook/useSearch";
 
 const GenreList = () => {
   const genres = [
-    "Adventure",
-    "Comedy",
-    "Thriller",
     "Romance",
     "Fantasy",
-    "Teen",
-    "TV_Movie",
+    "Comedy",
+    "Thriller",
     "Family",
+    "Teen",
+    "TV Movie",
     "Mystery",
     "Action",
     "Drama",
     "Crime",
-    "Science_Fiction",
+    "Adventure",
+    "Science Fiction",
     "All Genres",
   ];
   const { searchGenre, setSearchGenre } = useSearchContext();
@@ -45,11 +45,7 @@ const GenreList = () => {
                 color={colorMode === "dark" ? "#fff" : "#444"}
                 variant="link"
               >
-                {genre === "Science_Fiction"
-                  ? "Science Fiction"
-                  : genre === "TV_Movie"
-                  ? "TV Movie"
-                  : genre}
+                {genre}
               </Button>
             </HStack>
           </ListItem>

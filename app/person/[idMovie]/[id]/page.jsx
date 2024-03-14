@@ -1,6 +1,6 @@
 "use client";
 
-import GridLayout from "../../../components/GridLayout";
+import GridLayout from "../../../../components/GridLayout";
 import NextLink from "next/link";
 import {
   Image,
@@ -16,15 +16,14 @@ import {
   VStack,
   Box,
 } from "@chakra-ui/react";
-import useAuth from "../../../hook/useAuth";
-import usePerson from "../../../hook/usePerson";
-import CriticScore from "../../../components/CriticScore";
-import ListCast from "../../..//components/ListCast";
-import Footer from "../../../components/Footer";
+import useAuth from "../../../../hook/useAuth";
+import usePerson from "../../../../hook/usePerson";
+import CriticScore from "../../../../components/CriticScore";
+import ListCast from "../../../../components/ListCast";
+import Footer from "../../../../components/Footer";
 
 export default function page({ params }) {
-  const slug = decodeURI(params.slug);
-  const { data } = usePerson(slug);
+  const { data } = usePerson(parseInt(params.id), parseInt(params.idMovie));
   const { userDoc, currentUser } = useAuth();
   const colorDetails = useColorModeValue("gray.50", "gray.700");
 

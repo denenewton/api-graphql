@@ -13,7 +13,7 @@ import React from "react";
 import CriticScore from "./CriticScore";
 import Link from "next/link";
 
-const ListCast = ({ casts }) => {
+const ListCast = ({ casts, idMovie }) => {
   return (
     <Box w={"100%"} overflowY={"hidden"} overflowX={"auto"}>
       <List display={"flex"} gap={1} flexDir={"row"} scrollBehavior={"smooth"}>
@@ -30,7 +30,7 @@ const ListCast = ({ casts }) => {
                     height={"165px"}
                     // maxH={{ sm: "335px", md: "24=50px", lg: "170px", xl: "165px" }}
                   />
-                  <Link href={"/person/" + p?.id}>
+                  <Link href={`/person/${idMovie}/${p?.id}`}>
                     <CardBody>
                       <Box>
                         <Heading fontSize={"12px"}>{p.name}</Heading>

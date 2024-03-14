@@ -2,7 +2,6 @@ import {
   createMovieById,
   schemaUpdateMovie,
 } from "../../../../utils/utilities";
-import Joi from "joi";
 
 export const Mutation = {
   createMovieById: async (_, { id, url_movie }, { Movie }) => {

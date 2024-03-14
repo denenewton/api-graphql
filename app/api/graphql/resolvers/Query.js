@@ -81,6 +81,7 @@ export const Query = {
     { Movie }
   ) => {
     const { title, genre, year } = filter;
+
     try {
       const movies = await filtering(title, genre, year, Movie);
       if (!movies) {
@@ -99,17 +100,22 @@ export const Query = {
       };
     }
   },
-  getPersonById: async (_, { id }, { Person }) => {
+  getPersonById: async (_, { id, id_movie }, { Person }) => {
     try {
-      const pers = await Person.find({ id: id });
+      const pers = await Person.findOneAndUpdate(
+        { id: id },
+        { $addToSet: { id_movie: id_movie } },
+        { new: true }
+      );
 
-      if (pers.length > 0) {
-        return pers[0];
-      }
+      if (pers) return pers;
 
       const person = await getPersonMaped(id);
 
-      await Person.create({ ...person });
+      await Person.collection.insertOne({
+        ...person,
+        id_movie: [id_movie],
+      });
 
       return person;
     } catch (error) {

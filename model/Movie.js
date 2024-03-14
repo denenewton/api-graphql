@@ -2,7 +2,7 @@ import mongoose, { models } from "mongoose";
 import { castMemberSchema } from "./Castmember";
 import { genreSchema } from "./Genre";
 
-const Schema = mongoose.Schema({
+const Schema = new mongoose.Schema({
   title: {
     type: String,
     minlength: 3,
