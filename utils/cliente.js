@@ -16,7 +16,7 @@ const headers = {
 };
 
 export const Axios = axios.create({
-  baseURL: "http://localhost:3000/api/", //"https://api-graphql-kappa.vercel.app/api/",
+  baseURL: "https://api-graphql-kappa.vercel.app/api/", // "http://localhost:3000/api/",
   method: "post",
   headers: headers,
 });
