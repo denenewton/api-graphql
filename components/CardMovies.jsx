@@ -5,15 +5,17 @@ import buildUrl from "../services/buildUrl";
 import CircularProgressBar from "./CircularProgressBar";
 const CardMovies = ({ movie, userDoc, currentUser }) => {
   const url = buildUrl(movie?.title.toString());
-
+  const urlImage = movie?.url_image.replace('/w500', '/w400')
   return (
-    <Card key={movie?.id} overflow="hidden">
-      <Image
-        src={movie?.url_image}
-        alt={movie?.title}
-        objectFit="cover"
-        backgroundPosition="center"
-      />
+    <Card key={movie?.id} overflow="hidden"   >
+        <Image
+          src={urlImage}
+          alt={movie?.title}
+          objectFit='cover'
+          width='100%'
+          h={{lg:'169px'}}
+          backgroundPosition="center"
+        />
       <CircularProgressBar rating={movie?.vote_average.toFixed(1)} />
       <CardBody mt="-10px">
         <Link href={`/movie/${url}`}>
