@@ -12,7 +12,7 @@ const CircularProgressBar = ({ rating = 7 }) => {
         maxValue={10}
         text={rating}
         styles={buildStyles({
-          pathColor: rating < 5 ? "red" : rating < 7 ? "orange" : "green",
+          pathColor: rating < 5.5 ? "red" : rating < 7 ? "orange" : "green",
           pathTransitionDuration: 0.5,
           textSize: "34px",
           textColor: `${colorMode === "dark" ? "#fff" : "#111"}`,

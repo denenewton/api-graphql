@@ -12,7 +12,7 @@ const RegisterForm = () => {
     setPayload,
     submitting,
     setIsSubmitting,
-    createAMovie,
+    createMovie,
   } = useCreateMovie();
 
   const router = useRouter();
@@ -22,7 +22,7 @@ const RegisterForm = () => {
     setIsSubmitting(true);
 
     try {
-      const movie = await createAMovie(payload.id, payload.url_movie);
+      const movie = await createMovie(payload?.id, payload?.url_movie);
       console.log(movie);
       if (movie.errors) {
         throw new Error(movie.errors);

@@ -28,7 +28,7 @@ export async function getMovieMaped(id, url_movie) {
       director: json.production_companies[0].name || "null",
       backdrop_path: "https://image.tmdb.org/t/p/original" + json.backdrop_path,
       url_image: "https://image.tmdb.org/t/p/w500" + json.backdrop_path,
-      url_movie: url_movie || "https://drive.google.com/file/d/",
+      url_movie: url_movie ,
     };
   } catch (ex) {
     console.log("getMovieMaped: ", ex.message);
@@ -124,6 +124,7 @@ export async function createMovieWithCastMambers(movie, casts, Movie) {
 ////////////////CREATE//MOVIE//BY//ID///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 export async function createMovieById(id, url_movie, Movie) {
+  if(!url_movie) return new Error('Url of the movie is missing...')
   try {
     const exists = await Movie.findOne({ id: id });
     if (exists) {

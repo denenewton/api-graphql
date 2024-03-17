@@ -5,6 +5,7 @@ import {
 
 export const Mutation = {
   createMovieById: async (_, { id, url_movie }, { Movie }) => {
+    if(!url_movie) return new Error('Url of the movie is missin...')
     var movie = new Object();
 
     try {
