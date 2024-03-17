@@ -23,11 +23,12 @@ export async function getMovieMaped(id, url_movie) {
       genres: json.genres,
       release_date: json.release_date,
       popularity: json.popularity,
+      vote_average: json.vote_average,
       description: json.overview,
       director: json.production_companies[0].name || "null",
       backdrop_path: "https://image.tmdb.org/t/p/original" + json.backdrop_path,
       url_image: "https://image.tmdb.org/t/p/w500" + json.backdrop_path,
-      url_movie: url_movie ? url_movie : "https://drive.google.com/file/d/",
+      url_movie: url_movie || "https://drive.google.com/file/d/",
     };
   } catch (ex) {
     console.log("getMovieMaped: ", ex.message);

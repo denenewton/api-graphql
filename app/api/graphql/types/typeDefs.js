@@ -55,7 +55,7 @@ const typeDefs = gql`
     genres: [GenreInput]
     release_date: String!
     popularity: Float
-    vote_average: Float
+    vote_average: Float!
     director: String
     url_image: String
     url_movie: String
