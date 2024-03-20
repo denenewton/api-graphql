@@ -51,15 +51,15 @@ const typeDefs = gql`
 
   input MovieInput {
     id: Int
-    title: String!
+    title: String
     genres: [GenreInput]
-    release_date: String!
+    release_date: String
     popularity: Float
-    vote_average: Float!
+    vote_average: Float
     director: String
     url_image: String
     url_movie: String
-    description: String!
+    description: String
   }
 
   interface Character {
